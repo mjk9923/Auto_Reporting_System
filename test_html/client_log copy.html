@@ -20,7 +20,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="Viewport" content="width=device-width, initial-scale=0.1">
-    <title>date_log</title>
+    <title>client_log</title>
 
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     <link href="../static/css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -71,7 +71,7 @@
 <body>
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-      <div class="container"> <a class="brand" href="/chanwoojjangjjangman"><img src="../static/img/logo_HI.png" width="20" height="20">&nbsp;&nbsp;(주)홍익과학기술 &nbsp; 휴가 관리 시스템</a>
+      <div class="container"> <a class="brand"><img src="../static/img/logo_HI.png" width="20" height="20">&nbsp;&nbsp;(주)홍익과학기술 &nbsp; 관제 통합보고서 시스템</a>
       </div>
     </div>
   </div>
@@ -84,7 +84,7 @@
           <ul class="mainnav">
             <li><a href=""><br><img src="../static/img/icon/sunbed.png" width="20" height="20"><br>장애 내역 입력</a> </li>
             <li><a href="/client_com_request"><br><img src="../static/img/icon/calendar.png" width="20" height="20"><br>신규 고객사 등록</a></li>
-            <li class="active"><a href="/date_log"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>전채 고객사 조회</a> </li>            
+            <li class="active"><a href="/client_log"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>전채 고객사 조회</a> </li>            
             <li><a href=""><br><img src="../static/img/icon/list.png" width="20" height="20"><br>기존 고객사 삭제 </a> </li>
             <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>통계 보고서 출력</a> </li>
           </ul>
@@ -97,16 +97,15 @@
 
 
   <div class="wrap_sec">
-      <center><h1><strong>{{ current_year }}년 {{ current_month }}월 작업 내역 ( {{ filter_type }} )</strong></h1></center>
+      <center><h1><strong>솔트웨어 관제 서비스 고객사 리스트 ( {{ filter_type }} )</strong></h1></center>
       <br>
   
       <form method="post" id="yearMonthCheck" style="text-align:right">
           <div id="container1">
           <div id="input-form">
-     <strong>[검색기능] 이름 : </strong><input type="text" id="keyword" />
-          <input type="month" name="month" id="input_month">
+     <strong>[검색기능] 고객사명 : </strong><input type="text" id="keyword" />
           <select name="filter_type" id="filter_type" title="년도"></select>
-          <button type="submit" class="btn btn-primary" onclick="javascript: form.action='/vacation_log';">이동</button>
+          <button type="submit" class="btn btn-primary" onclick="javascript: form.action='/date_log';">이동</button>
           <button type="submit" class="btn btn-primary" onclick="javascript: form.action='/csv_file_download_with_file';">엑셀파일로 Download
           </button>
               </div>
@@ -117,58 +116,40 @@
   
           <table id="table_detail" class="table table--min" width="100%" border="0" cellspacing="0" cellpadding="0"
                  style="table-layout:fixed; border: 5px solid black; height: 100px; margin: auto; font-weight: bold;">
-  
+              
               <thead>
               <tr>
-                  <th scope="col">이름</th>
-                  <th scope="col">휴가 종류</th>
-                  <th scope="col">시작 날짜</th>
-                  <th scope="col">종료 날짜</th>
-                  <th scope="col">연차 사용 횟수</th>
-                  <th scope="col">사유</th>
-                  <th scope="col">결재 상태</th>
-                  <th scope="col">코멘트</th>
+                  <th scope="col">고객명</th>
+                  <th scope="col">고객분류</th>
+                  <th scope="col">총 건수</th>
+                  <th scope="col">월 건수</th>
               </tr>
               </thead>
               <tbody class="table-group-divider">
               {% for element in data %}
               {% if filter_type == "전체" %}
               <tr onclick="showHideRow('hidden_row{{ loop.index }}');" class="service">
-                  <td>{{element['name']}}</td>
-                  <td>{{element['type']}}</td>
-                  <td>{{element['start_date']}}</td>
-                  <td>{{element['end_date']}}</td>
-                  <td>{{date_diff_list[loop.index-1]}}</td>
-                  <td>{{element['reason']}}</td>
-                  <td>{{element['confirmation']}}</td>
-                  <td>{{element['comment']}}</td>
+                  <td>{{element['cliname']}}</td>
+                  <td>{{element['clitype']}}</td>
+                  <td>{{element['all_date']}}</td>
+                  <td>{{element['mon_date']}}</td>
               </tr>
-              {% elif filter_type == "연차" %}
-              {% if element['type'] == "연차" %}
+              {% elif filter_type == "중요 고객" %}
+              {% if element['type'] == "중요 고객" %}
               <tr onclick="showHideRow('hidden_row{{ loop.index }}');" class="service">
-                 
-                  <td>{{element['name']}}</td>
-                  <td>{{element['type']}}</td>
-                  <td>{{element['start_date']}}</td>
-                  <td>{{element['end_date']}}</td>
-                  <td>{{date_diff_list[loop.index-1]}}</td>
-                  <td>{{element['reason']}}</td>
-                  <td>{{element['confirmation']}}</td>
-                  <td>{{element['comment']}}</td>
+                  <td>{{element['cliname']}}</td>
+                  <td>{{element['clitype']}}</td>
+                  <td>{{element['all_date']}}</td>
+                  <td>{{element['mon_date']}}</td>
               </tr>
               {% endif %}
               {% else %}
-              {% if element['type'] == "오전 반차" or element['type'] == "오후 반차" %}
+              {% if element['type'] == "일반 고객" or element['type'] == "일반 고객" %}
               <tr onclick="showHideRow('hidden_row{{ loop.index }}');" class="service">
-                 
-                  <td>{{element['name']}}</td>
-                  <td>{{element['type']}}</td>
-                  <td>{{element['start_date']}}</td>
-                  <td>{{element['end_date']}}</td>
-                  <td>{{date_diff_list[loop.index-1]}}</td>
-                  <td>{{element['reason']}}</td>
-                  <td>{{element['confirmation']}}</td>
-                  <td>{{element['comment']}}</td>
+                  <td>{{element['cliname']}}</td>
+                  <td>{{element['clitype']}}</td>
+                  <td>{{element['all_date']}}</td>
+                  <td>{{element['mon_date']}}</td>
               </tr>
               {% endif %}
               {% endif %}
@@ -189,7 +170,7 @@
               })
           })
       $(".logo_index").click(function () {
-      window.location = '/hanseongbinjjangjjangman'
+      window.location = '/chanwoojjangjjangman'
   })
   
   $(document).ready(function(){
@@ -212,8 +193,8 @@
   
   function getYears(getY){
       $('#filter_type').append("<option value='" + "전체" + "'>" + "전체" +"</option>");
-      $('#filter_type').append("<option value='" + "연차" + "'>" + "연차" +"</option>");
-      $('#filter_type').append("<option value='" + "반차" + "'>" + "반차" +"</option>");
+      $('#filter_type').append("<option value='" + "중요 고객" + "'>" + "중요 고객" +"</option>");
+      $('#filter_type').append("<option value='" + "일반 고객" + "'>" + "일반 고객" +"</option>");
   }
   
   
