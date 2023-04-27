@@ -32,7 +32,7 @@ def exist_employee(cliname, clitype):
         return False
     
 # logs 테이블에 데이터 추가
-def insert_logs_query(cliname, clitype, occur, action, charge, perform, day, comment):
+def insert_logs_query(cliname, clitype, occur, nmtime, action, charge, perform, day, comment):
     db = pymysql.connect(
         host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
     )
@@ -41,9 +41,10 @@ def insert_logs_query(cliname, clitype, occur, action, charge, perform, day, com
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
     # DB 실행
-    sql = "INSERT INTO logs (cliname, clitype, occur, action, charge, perform, day, comment) values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}');".format(cliname, 
+    sql = "INSERT INTO logs (cliname, clitype, occur, nmtime, action, charge, perform, day, comment) values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}');".format(cliname, 
                                                                                                                                                               clitype, 
-                                                                                                                                                              occur, 
+                                                                                                                                                              occur,
+                                                                                                                                                              nmtime, 
                                                                                                                                                               action, 
                                                                                                                                                               charge, 
                                                                                                                                                               perform, 
@@ -104,27 +105,6 @@ def select_worklist_query_whole():
 
     return result
 
-# worklist 테이블 고객사 리스트 조회(ID를 기준으로 내림차순 정렬된 형태로 표시)
-#def select_log_query_client(clitype):
-#    db = pymysql.connect(
-#        host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
-#    )
-
-    # DictCursor: 딕셔너리 형태 / Cursor: 튜플 형태
-#    cursor = db.cursor(pymysql.cursors.DictCursor)
-
-    # DB 실행
-#    sql = "select * from worklist where clitype like '{0}';".format(clitype)
-#    print(sql)
-#    cursor.execute(sql)
-
-    # 쿼리 실행 결과 result에 할당
-#    result = cursor.fetchall()
-#    print(result)
-
-#    db.close()
-
-    #return result
 
 # worklist 테이블 고객사 연간 데이터 조회
 def select_log_query_year_employee(cliname,clitype):

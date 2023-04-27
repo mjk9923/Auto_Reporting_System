@@ -69,9 +69,10 @@
         <div class="container">
           <ul class="mainnav">
             <li><a href="/work_com_request"><br><img src="../static/img/icon/sunbed.png" width="20" height="20"><br>장애 내역 입력</a> </li>
-            <li class="active"><a href="/client_com_request"><br><img src="../static/img/icon/calendar.png" width="20" height="20"><br>신규 고객사 등록</a></li>
-            <li><a href="/client_log"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>전채 고객사 조회</a> </li>            
-            <li><a href=""><br><img src="../static/img/icon/list.png" width="20" height="20"><br>기존 고객사 삭제 </a> </li>
+            <li class="active"><a href="/client_com_request"><br><img src="../static/img/icon/calendar.png" width="20" height="20"><br>고객사 관리</a></li>
+            <li><a href="/client_log"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>연간 내역 조회</a> </li>            
+            <li><a href=""><br><img src="../static/img/icon/list.png" width="20" height="20"><br>월간 내역 조회</a> </li>
+            <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>작업 내역 수정/삭제</a> </li>
             <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>통계 보고서 출력</a> </li>
           </ul>
         </div>
@@ -105,6 +106,61 @@
         <img src="../static/img/chanwoogirlfreind.jpg" width="300" height="300">
       </div>
     </form>
+
+
+
+    <div class="wrap_sec">
+      <center><h1><strong>솔트웨어 관제 서비스 고객사 리스트</strong></h1></center>
+      <br>
+      <center><strong><h5>
+      <p>관제 서비스 고객사 페이지입니다.</p>
+      <p>
+          해당 항목을 선택하면 고객사의 상세 정보가 나타납니다..<br>
+          기타 문의사항은 문의주시면 감사하겠습니다.</h5>
+          <div id="container1">
+          <div id="input-form">
+              <br>
+              <strong>[검색기능] 고객사명 : </strong><input type="text" id="keyword" />
+              <strong> 고객분류 : </strong>
+              <input type="text" id="typeword" list="clilist" />
+              <datalist id="clilist">
+                <option value="중요 고객"></option>
+                <option value="일반 고객"></option>
+              </datalist>
+          </div>
+  
+      <div class="container" style="width:100; height:700px; overflow:auto">
+      <table id="table_detail" class="table table--min" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed; border: 5px solid black; height: 100px; margin: auto; font-weight: bold;" >
+          <thead>
+          <tr>
+              <th scope="col">고객명</th>
+              <th scope="col">고객분류</th>
+              <th scope="col">연 건수</th>
+              <th scope="col">월 건수</th>
+          </tr>
+          </thead>
+          <tbody class="table-group-divider">
+          {% for element in data %}
+          <tr onclick="vacation_per_employee('employee_info_{{ loop.index }}');" class="employee_row">
+              <td>{{element['cliname']}}</td>
+              <td>{{element['clitype']}}</td>
+              <td>{{element['all_date']}}</td>
+              <td>{{element['mon_date']}}</td>
+          </tr>
+          <form action="/vacation_per_employee" method="post" class="employee_info_{{ loop.index }}">
+              <input name="cliname" value="{{element['cliname']}}" type="hidden">
+              <input name="clitype" value="{{element['clitype']}}" type="hidden">
+              <input name="all_date" value="{{element['all_date']}}" type="hidden">
+              <input name="mon_date" value="{{element['mon_date']}}" type="hidden">
+          </form>
+          {% endfor %}
+          </tbody>
+  
+      </table>
+      </div>
+      </form>
+    </div>
+    </div>
   
 
 <div class="footer footer-fixed-bottom">
@@ -140,6 +196,32 @@ function checking_2() {
     checking1.checked = false;
     }
    }
+
+   $(document).ready(function() {
+            $("#keyword").keyup(function() {
+                var k = $(this).val();
+                $("#table_detail > tbody > tr").hide();
+                var temp = $("#table_detail > tbody > tr > td:nth-child(5n+1):contains('" + k + "')");
+
+                $(temp).parent().show();
+            })
+        })
+
+        $(document).ready(function() {
+            $("#typeword").keyup(function() {
+                var t = $(this).val();
+                $("#table_detail > tbody > tr").hide();
+                var temp = $("#table_detail > tbody > tr > td:nth-child(5n+2):contains('" + t + "')");
+
+                $(temp).parent().show();
+            })
+        })
+
+
+function vacation_per_employee(row) {
+    $("." + row).submit();
+}
+
 
 </script>
 </body>
