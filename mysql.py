@@ -2,6 +2,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import pymysql
 
+
 # 신규로 추가되는 고객사인지 판별하는 함수
 # 기존 테이블에 데이터가 있다면 True 반환 / 없다면 False 반환
 def exist_employee(cliname, clitype):
@@ -84,7 +85,7 @@ def insert_worklist_query(cliname, clitype):
     db.close()
 
 # worklist 테이블 전체 데이터 조회
-def select_worklist_query_whole():
+def select_worklist():
     db = pymysql.connect(
         host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
     )
@@ -138,7 +139,7 @@ def select_log_query_year_employee(cliname,clitype):
     return result
 
 # worklist 테이블에 데이터 변경
-def update_stat_query(cliname, clitype, all_data, mon_data):
+def update_stat_query(cliname, clitype):
     db = pymysql.connect(
         host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
     )
@@ -147,13 +148,31 @@ def update_stat_query(cliname, clitype, all_data, mon_data):
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
     # DB 실행
-    sql = "update worklist set all_data={0}, mon_data={1} where cliname='{2}' and clitype='{3}';".format(all_data,
-                                                                                                     mon_data,
-                                                                                                     cliname,
-                                                                                                     clitype)
+    sql = "UPDATE worklist SET all_date = (SELECT COUNT(*) AS count FROM logs WHERE YEAR(day) \
+        = 2023 AND cliname = '{0}' AND worklist.cliname = logs.cliname AND worklist.clitype \
+              = logs.clitype) WHERE cliname = '{0}';".format(cliname,
+                                                              clitype
+                                                              )
+    print(sql)
+    cursor.execute(sql)
+    db.commit()
+    
+    db.close()
+
+# 고객사 연도별 작업 개수 테스트
+def db_test(cliname, year, all_data):
+    db = pymysql.connect(
+        host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
+    )
+
+    # DictCursor: 딕셔너리 형태 / Cursor: 튜플 형태
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    # DB 실행
+    sql = "SELECT COUNT(*) AS '{0}' FROM logs WHERE YEAR({1}) = 2023 AND cliname = '{0}';".format(cliname,
+                                                                                                  year)
     print(sql)
     cursor.execute(sql)
     db.close()
-
-
+    
     
