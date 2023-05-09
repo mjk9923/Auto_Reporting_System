@@ -58,27 +58,25 @@ def client_com_request_click():
     return render_template("sub/client_com_pop.html")
 
 
-
-# 직원별 휴가 일수 연별 통계
+# 고객별 작업 일수 연별 통계
 # 테스트
-@app.route("/year_stat2", methods=["POST", "GET"])
+@app.route("/test", methods=["POST", "GET"])
 def year_stat2():
     dt_now = datetime.now()
     year = dt_now.strftime('%Y')
     if request.method == 'POST':
         year = request.form["year"]
 
-    # stat 테이블 전체 조회해서 전체 직원 정보 추출
+    # stat 테이블 전체 조회해서 전체 고객사 정보 추출
     for row in select_worklist():   
        
-        # 직원 별로 연차, 반차 데이터를 업데이트
+        # 고객사 총 건수 업데이트
         result_update = update_stat_query(row['cliname'], row['clitype'])
     
     result = select_worklist()
-    return render_template("service/year_stat.html", data=result, current_year=year)
+    return render_template("test/year_stat.html", data=result, current_year=year)
 
-# log 테이블에 휴가 신청에 대한 내역 추가
-    #insert_log_query(cliname, clitype, occur, action, charge, perform, day, comment)
+
 
 if __name__ == '__main__':
     app.run(host="192.168.219.29", port="9730", debug=True)

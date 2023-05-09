@@ -321,7 +321,7 @@ textarea {
 }
 
 .footer-fixed-bottom {
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	bottom: 0;
 }
