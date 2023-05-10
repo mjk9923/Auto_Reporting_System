@@ -29,19 +29,32 @@
 
     <style>
       #left {
-        padding-left: 120px;
-        padding-top: 65px;
-        padding-right:30px;
+        padding-left: 35px;
+        padding-top: 20px;
+        padding-right:10px;
         width: auto;
         height: auto;
         float: left;
       }
-      
-      #right {
-        padding-top: 65px;
+
+      #left2 {
+        padding-top: 150px;
+        padding-right:30px;
+        padding-left: 35px;
         width: auto;
         float: left;
+        position: absolute;
       }
+
+      #left3 {
+        padding-top: 150px;
+        padding-right:50px;
+        padding-left: 35px;
+        width: auto;
+        float: left;
+        position: relative;
+      }
+      
 
       #request {
         width: 150px;
@@ -54,32 +67,35 @@
         margin-top: -387px;
       }
 
+    
+
     </style>
 </head>
 
 <body>
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container"> <a class="brand"><img src="../static/img/logo_HI.png" width="20" height="20">&nbsp;&nbsp;(주)홍익과학기술 &nbsp; 관제 통합보고서 시스템</a>
-          </div>
-        </div>
-     </div>
-      
-     <div class="subnavbar">
-      <div class="subnavbar-inner">
-        <div class="container">
-          <ul class="mainnav">
-            <li class="active"><a href="/work_com_request"><br><img src="../static/img/icon/sunbed.png" width="20" height="20"><br>장애 내역 입력</a> </li>
-            <li><a href="/client_com_request"><br><img src="../static/img/icon/calendar.png" width="20" height="20"><br>신규 고객사 등록</a></li>
-            <li><a href="/client_log"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>전채 고객사 조회</a> </li>            
-            <li><a href=""><br><img src="../static/img/icon/list.png" width="20" height="20"><br>기존 고객사 삭제 </a> </li>
-            <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>통계 보고서 출력</a> </li>
-          </ul>
-        </div>
-        <!-- /container --> 
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container"> <a class="brand"><img src="../static/img/logo_HI.png" width="20" height="20">&nbsp;&nbsp;(주)홍익과학기술 &nbsp; 관제 통합보고서 시스템</a>
       </div>
-      <!-- /subnavbar-inner --> 
     </div>
+ </div>
+  
+ <div class="subnavbar">
+  <div class="subnavbar-inner">
+    <div class="container">
+      <ul class="mainnav">
+        <li><a href="/work_com_request"><br><img src="../static/img/icon/sunbed.png" width="20" height="20"><br>장애 내역 입력</a> </li>
+        <li class="active"><a href="/client_com_request"><br><img src="../static/img/icon/calendar.png" width="20" height="20"><br>고객사 관리</a></li>
+        <li><a href="/client_log"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>연간 내역 조회</a> </li>            
+        <li><a href=""><br><img src="../static/img/icon/list.png" width="20" height="20"><br>월간 내역 조회</a> </li>
+        <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>작업 내역 수정/삭제</a> </li>
+        <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>통계 보고서 출력</a> </li>
+      </ul>
+    </div>
+    <!-- /container --> 
+  </div>
+  <!-- /subnavbar-inner --> 
+</div>
 
     <center><h1><strong>솔트웨어 관제 장애 내역 등록</strong></h1></center>
       <br>
@@ -90,18 +106,21 @@
      
     <form action="/work_com_request_click" method="post" class="wrap_form" >
       <div id="center">
-        <div class="mb-3">
-          <label class="form-label"><strong><br><h3>고객사명<h3></strong></label>
-          <input type="text" name="cliname" class="form-control" id="cliname">
-        </div>
-
-      <div class="mb-3">
+        <div class="mb-3" id="left">
           <label class="form-label" ><strong><br><h3>고객분류</h3></strong></label>
           <input id="check1" type="checkbox" name="pointCheck" value="중요 고객" onClick="checking_1();" /> 중요 고객
           <input id="check2" type="checkbox" name="pointCheck" value="일반 고객" onClick="checking_2();" /> 일반 고객
       </div>
 
-      <div class="mb-3">
+
+        <div class="mb-3" id="left">
+          <label class="form-label"><strong><br><h3>고객사명<h3></strong></label>
+          <input type="text" name="cliname" class="form-control" id="cliname">
+        </div>
+
+ 
+
+      <div class="mb-3" id="left">
         <label class="form-label"><strong><br><h3>장애분류<h3></strong></label>
         <select name="occur", id="occur">
           <option value="미 분류">미 분류</option>
@@ -118,22 +137,22 @@
         </select>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" id="left">
         <label class="form-label"><strong><br><h3>건수<h3></strong></label>
         <input type="number" min="0" max="100" name="nmtime" class="form-control" id="nmtime">
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" id="left">
         <label class="form-label"><strong><br><h3>조치내역<h3></strong></label>
         <input type="text" name="action" class="form-control" id="action">
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" id="left2" >
         <label class="form-label"><strong><br><h3>담당자<h3></strong></label>
         <input type="text" name="charge" class="form-control" id="charge">
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" id="left3" > 
         <label class="form-label"><strong><br><h3>수행내용<h3></strong></label>
         <select name="perform", id="perform">
           <option value="배정">배정</option>
@@ -141,18 +160,18 @@
         </select>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" id="left2">
         <label class="form-label"><strong><br><h3>일자<h3></strong></label>
         <input type="date" name="day" class="form-control" id="day">
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" id="left2">
         <label class="form-label"><strong><br><h3>비고<h3></strong></label>
         <input type="text" name="comment" class="form-control" id="comment">
       </div>
 
       
-      <div class="mb-3">
+      <div class="mb-3" >
           <button id="request" type="submit" class="btn btn-primary">
           <h3>등록하기</h3></button>
       </div>

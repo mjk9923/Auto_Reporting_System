@@ -120,8 +120,7 @@
           <tr>
               <th scope="col">고객명</th>
               <th scope="col">고객분류</th>
-              <th scope="col">연 건수</th>
-              <th scope="col">월 건수</th>
+              <th scope="col">총 작업 건수</th>
           </tr>
           </thead>
           <tbody class="table-group-divider">
@@ -130,13 +129,11 @@
               <td>{{element['cliname']}}</td>
               <td>{{element['clitype']}}</td>
               <td>{{element['all_date']}}</td>
-              <td>{{element['mon_date']}}</td>
           </tr>
           <form action="/vacation_per_employee" method="post" class="employee_info_{{ loop.index }}">
               <input name="cliname" value="{{element['cliname']}}" type="hidden">
               <input name="clitype" value="{{element['clitype']}}" type="hidden">
               <input name="all_date" value="{{element['all_date']}}" type="hidden">
-              <input name="mon_date" value="{{element['mon_date']}}" type="hidden">
           </form>
           {% endfor %}
           </tbody>

@@ -139,7 +139,7 @@ def select_log_query_year_employee(cliname,clitype):
     return result
 
 # worklist 테이블에 데이터 변경
-def update_stat_query(cliname, clitype):
+def update_stat_all_date(cliname, clitype):
     db = pymysql.connect(
         host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
     )
@@ -148,8 +148,8 @@ def update_stat_query(cliname, clitype):
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
     # DB 실행
-    sql = "UPDATE worklist SET all_date = (SELECT COUNT(*) AS count FROM logs WHERE YEAR(day) \
-        = 2023 AND cliname = '{0}' AND worklist.cliname = logs.cliname AND worklist.clitype \
+    sql = "UPDATE worklist SET all_date = (SELECT COUNT(*) AS count FROM logs  \
+         WHERE cliname = '{0}' AND worklist.cliname = logs.cliname AND worklist.clitype \
               = logs.clitype) WHERE cliname = '{0}';".format(cliname,
                                                               clitype
                                                               )
@@ -160,7 +160,7 @@ def update_stat_query(cliname, clitype):
     db.close()
 
 # 고객사 연도별 작업 개수 테스트
-def db_test(cliname, year, all_data):
+def select_stat_year_date(year):
     db = pymysql.connect(
         host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
     )
@@ -169,10 +169,15 @@ def db_test(cliname, year, all_data):
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
     # DB 실행
-    sql = "SELECT COUNT(*) AS '{0}' FROM logs WHERE YEAR({1}) = 2023 AND cliname = '{0}';".format(cliname,
-                                                                                                  year)
+    sql = "SELECT cliname, clitype, COUNT(*) AS year_date FROM logs WHERE YEAR(day) = '{0}' GROUP BY cliname, clitype".format(year)                                                                                       
     print(sql)
     cursor.execute(sql)
+
+    # 쿼리 실행 결과 result에 할당
+    result = cursor.fetchall()
+    print(result)
+    
     db.close()
-    
-    
+
+    return result
+

@@ -1,3 +1,4 @@
+#!/bin/python3
 import csv
 from flask import *
 from mysql import *
@@ -42,6 +43,11 @@ def client_com_request():
     dt_now = datetime.now()
     year = dt_now.strftime('%Y')
 
+    for row in select_worklist():   
+       
+        # 고객사 총 건수 업데이트
+        result_update = update_stat_all_date(row['cliname'], row['clitype'])
+    
     result = select_worklist()
     return render_template('service/client_com_request.html', data=result, client_type=year)
 
@@ -61,21 +67,16 @@ def client_com_request_click():
 # 고객별 작업 일수 연별 통계
 # 테스트
 @app.route("/test", methods=["POST", "GET"])
-def year_stat2():
+def test():
     dt_now = datetime.now()
     year = dt_now.strftime('%Y')
     if request.method == 'POST':
         year = request.form["year"]
 
-    # stat 테이블 전체 조회해서 전체 고객사 정보 추출
-    for row in select_worklist():   
-       
-        # 고객사 총 건수 업데이트
-        result_update = update_stat_query(row['cliname'], row['clitype'])
-    
-    result = select_worklist()
-    return render_template("test/year_stat.html", data=result, current_year=year)
+    print(year)
 
+    result = select_stat_year_date(year)
+    return render_template("test/year_stat.html", data=result, current_year=year)
 
 
 if __name__ == '__main__':
