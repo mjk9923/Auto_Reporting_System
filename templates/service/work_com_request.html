@@ -13,6 +13,7 @@
     <link href="../static/css/font-awesome.css" rel="stylesheet">
     <link href="../static/css/style.css" rel="stylesheet">
     <link href="../static/css/pages/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/new_main.css">
     <!-- CSS only -->
 
   
@@ -34,7 +35,6 @@
         padding-right:10px;
         width: auto;
         height: auto;
-        float: left;
       }
 
       #left2 {
@@ -42,12 +42,10 @@
         padding-right:30px;
         padding-left: 35px;
         width: auto;
-        float: left;
-        position: absolute;
       }
 
       #left3 {
-        padding-top: 150px;
+        padding-top: 130px;
         padding-right:50px;
         padding-left: 35px;
         width: auto;
@@ -75,7 +73,7 @@
 <body>
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-      <div class="container"> <a class="brand"><img src="../static/img/logo_HI.png" width="20" height="20">&nbsp;&nbsp;(주)홍익과학기술 &nbsp; 관제 통합보고서 시스템</a>
+      <div class="container"> <a class="brand" href="/chanwoojjangjjangman"><img src="../static/img/logo_HI.png" width="20" height="20">&nbsp;&nbsp;(주)홍익과학기술 &nbsp; 관제 통합보고서 시스템</a>
       </div>
     </div>
  </div>
@@ -84,11 +82,11 @@
   <div class="subnavbar-inner">
     <div class="container">
       <ul class="mainnav">
-        <li><a href="/work_com_request"><br><img src="../static/img/icon/sunbed.png" width="20" height="20"><br>장애 내역 입력</a> </li>
-        <li class="active"><a href="/client_com_request"><br><img src="../static/img/icon/calendar.png" width="20" height="20"><br>고객사 관리</a></li>
-        <li><a href="/client_log"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>연간 내역 조회</a> </li>            
-        <li><a href=""><br><img src="../static/img/icon/list.png" width="20" height="20"><br>월간 내역 조회</a> </li>
-        <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>작업 내역 수정/삭제</a> </li>
+        <li class="active"><a href="/work_com_request"><br><img src="../static/img/icon/sunbed.png" width="20" height="20"><br>장애 내역 입력</a> </li>
+        <li><a href="/client_com_request"><br><img src="../static/img/icon/calendar.png" width="20" height="20"><br>고객사 관리</a></li>
+        <li><a href="/year_stat"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>연간 내역 조회</a> </li>            
+        <li><a href="/mon_stat"><br><img src="../static/img/icon/list.png" width="20" height="20"><br>월간 내역 조회</a> </li>
+        <li><a href="/client_logs"><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>작업 내역 수정/삭제</a> </li>
         <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>통계 보고서 출력</a> </li>
       </ul>
     </div>
@@ -97,85 +95,139 @@
   <!-- /subnavbar-inner --> 
 </div>
 
-    <center><h1><strong>솔트웨어 관제 장애 내역 등록</strong></h1></center>
-      <br>
-      <center><strong><h5>
-      <p>관제 서비스 장애 내역 등록 페이지입니다.</p> </br>
-      <p>신규 고객사의 경우 고객사 등록을 선 순위로 진행하여야 합니다..</p>
+    
 
      
     <form action="/work_com_request_click" method="post" class="wrap_form" >
       <div id="center">
-        <div class="mb-3" id="left">
-          <label class="form-label" ><strong><br><h3>고객분류</h3></strong></label>
-          <input id="check1" type="checkbox" name="pointCheck" value="중요 고객" onClick="checking_1();" /> 중요 고객
-          <input id="check2" type="checkbox" name="pointCheck" value="일반 고객" onClick="checking_2();" /> 일반 고객
-      </div>
+        
+        <!-- wrapper -->
+        <div id="wrapper">
+          <center><h1><strong>솔트웨어 관제 장애 내역 등록</strong></h1></center>
+          <br>
+          <center><strong><h5>
+          <p>관제 서비스 장애 내역 등록 페이지입니다.</p> 
+          <p>신규 고객사의 경우 고객사 등록을 선 순위로 진행하여야 합니다..</p>
+          <br>
+          <!-- content-->
+          <div id="content">
+            
+              <!-- 고객분류 -->
+              <div>
+                  <h3 class="mb-3">
+                    <div style="text-align:left">
+                      <label class="form-label">고객분류</label></div>
+                  </h3>
+                  <span class="box gender_code">
+                    <select name="clitype" id="clitype">
+                      <option value="중요 고객">중요 고객</option>
+                      <option value="일반 고객">일반 고객</option>
+                    </select>
+                  </span>
+              </div>
+
+              <!-- 고객사명 -->
+              <div>
+                  <h3 class="mb-3">
+                    <div style="text-align:left">
+                    <label class="form-label">고객사명</label></div>
+                  </h3>
+                    <input type="text" name="cliname" id="cliname" class="int">
+              </div>
+
+              <!-- 장애분류 -->
+              <div>
+                  <h3 class="mb-3">
+                    <div style="text-align:left">
+                      <label class="form-label">장애분류</label></div>
+                  </h3>
+                  <span class="box gender_code">
+                    <select name="occur" id="occur">
+                      <option value="미 분류">미 분류</option>
+                      <option value="알람-LV1">알람-LV1</option>
+                      <option value="알람-LV2">알람-LV2</option>
+                      <option value="알람-LV3">알람-LV3</option>
+                      <option value="티켓-일반문의">티켓-일반문의</option>
+                      <option value="티켓-장애문의">티켓-장애문의</option>
+                      <option value="통화-수신">통화-수신</option>
+                      <option value="통화-발신">통화-발신</option>
+                      <option value="통화-부재중">통화-부재중</option>
+                      <option value="계정통합-입점">계정통합-입점</option>
+                      <option value="RSS-Status">RSS-Status</option>
+                    </select>
+                  </span>
+              </div>
 
 
-        <div class="mb-3" id="left">
-          <label class="form-label"><strong><br><h3>고객사명<h3></strong></label>
-          <input type="text" name="cliname" class="form-control" id="cliname">
-        </div>
+              <!-- 건수 -->
+              <div>
+                  <h3 class="mb-3">
+                     <div style="text-align:left">
+                     <label class="form-label">작업 건 수</label></div>
+                  </h3>
+                  <input type="number" min="0" max="100" name="nmtime" \
+                  class="int" id="nmtime">
+             </div>
 
- 
+              <!-- 조치내역 -->
+              <div>
+                  <h3 class="mb-3">
+                    <div style="text-align:left">
+                    <label class="form-label">조치내역</label></div>
+                  </h3>
+                    <input type="text" name="action" id="action" class="int">
+              </div>
 
-      <div class="mb-3" id="left">
-        <label class="form-label"><strong><br><h3>장애분류<h3></strong></label>
-        <select name="occur", id="occur">
-          <option value="미 분류">미 분류</option>
-          <option value="알람-LV1">알람-LV1</option>
-          <option value="알람-LV2">알람-LV2</option>
-          <option value="알람-LV3">알람-LV3</option>
-          <option value="티켓-일반문의">티켓-일반문의</option>
-          <option value="티켓-장애문의">티켓-장애문의</option>
-          <option value="통화-수신">통화-수신</option>
-          <option value="통화-발신">통화-발신</option>
-          <option value="통화-부재중">통화-부재중</option>
-          <option value="계정통합-입점">계정통합-입점</option>
-          <option value="RSS-Status">RSS-Status</option>
-        </select>
-      </div>
+              <!-- 담당자 -->
+              <div>
+                <h3 class="mb-3">
+                  <div style="text-align:left">
+                  <label class="form-label">담당자</label></div>
+                </h3>
+                  <input type="text" name="charge" id="charge" class="int">
+              </div>
 
-      <div class="mb-3" id="left">
-        <label class="form-label"><strong><br><h3>건수<h3></strong></label>
-        <input type="number" min="0" max="100" name="nmtime" class="form-control" id="nmtime">
-      </div>
+              <!-- 수행내용 -->
+              <div>
+                <h3 class="mb-3">
+                  <div style="text-align:left">
+                    <label class="form-label">수행내용</label></div>
+                </h3>
+                <span class="box gender_code">
+                  <select name="perform" id="perform">
+                    <option value="배정">배정</option>
+                    <option value="배정/유선연락">배정/유선연락</option>
+                  </select>
+                </span>
+              </div>
+              
+              <!-- 일자 -->
+              <div>
+                <h3 class="mb-3">
+                  <div style="text-align:left">
+                  <label class="form-label">일자</label></div>
+                </h3>
+                 <input type="date" name="day"  id="day" class="int">
+              </div>
 
-      <div class="mb-3" id="left">
-        <label class="form-label"><strong><br><h3>조치내역<h3></strong></label>
-        <input type="text" name="action" class="form-control" id="action">
-      </div>
+              <!-- 비고 -->
+              <div>
+                <h3 class="mb-3">
+                  <div style="text-align:left">
+                  <label class="form-label">비고</label></div>
+                </h3>
+                  <input type="text" name="comment" id="comment" class="int">
+              </div>
 
-      <div class="mb-3" id="left2" >
-        <label class="form-label"><strong><br><h3>담당자<h3></strong></label>
-        <input type="text" name="charge" class="form-control" id="charge">
-      </div>
+              <!-- 등록 -->
+              <div class="btn_area">
+                <button id="btnJoin" type="submit">
+                <spam>등록하기</spam>
+                </button>
+              </div>
 
-      <div class="mb-3" id="left3" > 
-        <label class="form-label"><strong><br><h3>수행내용<h3></strong></label>
-        <select name="perform", id="perform">
-          <option value="배정">배정</option>
-          <option value="배정/유선연락">배정/유선연락</option>
-        </select>
-      </div>
-
-      <div class="mb-3" id="left2">
-        <label class="form-label"><strong><br><h3>일자<h3></strong></label>
-        <input type="date" name="day" class="form-control" id="day">
-      </div>
-
-      <div class="mb-3" id="left2">
-        <label class="form-label"><strong><br><h3>비고<h3></strong></label>
-        <input type="text" name="comment" class="form-control" id="comment">
-      </div>
-
-      
-      <div class="mb-3" >
-          <button id="request" type="submit" class="btn btn-primary">
-          <h3>등록하기</h3></button>
-      </div>
-     
+          </div> 
+          <!-- content-->
 
       <div id="chanwoogirlfreind">
         <!--<img src="../static/img/chanwoogirlfreind.jpg" width="300" height="300">

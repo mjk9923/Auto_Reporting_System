@@ -5,7 +5,8 @@ import pymysql
 
 # 신규로 추가되는 고객사인지 판별하는 함수
 # 기존 테이블에 데이터가 있다면 True 반환 / 없다면 False 반환
-def exist_employee(cliname, clitype):
+# 고객사 비교 (worklist == logs)
+def insert_check_data(cliname, clitype):
     db = pymysql.connect(
         host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
     )
@@ -31,7 +32,7 @@ def exist_employee(cliname, clitype):
         return True
     else:
         return False
-    
+
 # logs 테이블에 데이터 추가
 def insert_logs_query(cliname, clitype, occur, nmtime, action, charge, perform, day, comment):
     db = pymysql.connect(
@@ -159,7 +160,7 @@ def update_stat_all_date(cliname, clitype):
     
     db.close()
 
-# 고객사 연도별 작업 개수 테스트
+# 고객사 연도별 작업 개수
 def select_stat_year_date(year):
     db = pymysql.connect(
         host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
@@ -181,3 +182,100 @@ def select_stat_year_date(year):
 
     return result
 
+# 고객사 월 별 작업 개수
+def select_stat_mon_date(year,month):
+    db = pymysql.connect(
+        host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
+    )
+
+    # DictCursor: 딕셔너리 형태 / Cursor: 튜플 형태
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    # DB 실행
+    sql = "SELECT cliname, clitype, COUNT(*) AS mon_date FROM logs \
+         WHERE YEAR(day) = '{0}' AND MONTH(day) = '{1}' \
+         GROUP BY cliname, clitype;".format(year,
+                                            month)                                                                       
+    print(sql)
+    cursor.execute(sql)
+
+    # 쿼리 실행 결과 result에 할당
+    result = cursor.fetchall()
+    print(result)
+    
+    db.close()
+
+    return result
+
+# 작업 내역 페이지
+def select_stat_client_logs(year,month):
+    db = pymysql.connect(
+        host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
+    )
+
+    # DictCursor: 딕셔너리 형태 / Cursor: 튜플 형태
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    # DB 실행
+    sql = "SELECT * FROM logs WHERE YEAR(day) = '{0}' AND MONTH(day) = '{1}' \
+         ORDER BY day DESC;".format(year,
+                                   month)
+
+    print(sql)
+    cursor.execute(sql)
+
+    # 쿼리 실행 결과 result에 할당
+    result = cursor.fetchall()
+    print(result)
+
+    db.close()
+
+    return result
+
+####테스트
+## logs 작업 내역 페이지
+def select_stat_logs_id(id):
+    db = pymysql.connect(
+        host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
+    )
+
+    # DictCursor: 딕셔너리 형태 / Cursor: 튜플 형태
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    # DB 실행
+    sql = "select * from logs where id='{0}';".format(
+        id)
+ 
+    print(sql)
+    cursor.execute(sql)
+
+    # 쿼리 실행 결과 result에 할당
+    result = cursor.fetchall()
+    print(result)
+
+    db.close()
+
+    return result
+
+# logs 작업 내역 삭제
+def delete_logs(id):
+    db = pymysql.connect(
+        host='192.168.219.29', port=3306, user='dev_cw', password='cksdn3839!', db='STW', charset='utf8mb4'
+    )
+    # DictCursor: 딕셔너리 형태 / Cursor: 튜플 형태
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    # DB 실행
+    sql = "delete from logs where id ='{0}';".format(
+        id)
+
+    print(sql)
+    cursor.execute(sql)
+
+    # 쿼리 실행 결과 result에 할당   
+    result = cursor.fetchall()  
+    db.commit()
+
+    db.close()
+    
+    return result

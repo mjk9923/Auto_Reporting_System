@@ -20,7 +20,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="Viewport" content="width=device-width, initial-scale=0.1">
-    <title>cw_dev</title>
+    <title>cw_Dev2</title>
 
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     <link href="../static/css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -71,7 +71,7 @@
 <body>
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-      <div class="container"> <a class="brand"><img src="../static/img/logo_HI.png" width="20" height="20">&nbsp;&nbsp;(주)홍익과학기술 &nbsp; 관제 통합보고서 시스템</a>
+      <div class="container"> <a class="brand" href="/chanwoojjangjjangman"><img src="../static/img/logo_HI.png" width="20" height="20">&nbsp;&nbsp;(주)홍익과학기술 &nbsp; 관제 통합보고서 시스템</a>
       </div>
     </div>
  </div>
@@ -82,9 +82,9 @@
       <ul class="mainnav">
         <li><a href="/work_com_request"><br><img src="../static/img/icon/sunbed.png" width="20" height="20"><br>장애 내역 입력</a> </li>
         <li><a href="/client_com_request"><br><img src="../static/img/icon/calendar.png" width="20" height="20"><br>고객사 관리</a></li>
-        <li class="active"><a href="/client_log"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>연간 내역 조회</a> </li>            
-        <li><a href=""><br><img src="../static/img/icon/list.png" width="20" height="20"><br>월간 내역 조회</a> </li>
-        <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>작업 내역 수정/삭제</a> </li>
+        <li><a href="/year_stat"><br><img src="../static/img/icon/date.png" width="20" height="20"><br>연간 내역 조회</a> </li>            
+        <li class="active"><a href="/mon_stat"><br><img src="../static/img/icon/list.png" width="20" height="20"><br>월간 내역 조회</a> </li>
+        <li><a href="/client_logs"><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>작업 내역 수정/삭제</a> </li>
         <li><a href=""><br><img src="../static/img/icon/delete.png" width="20" height="20"><br>통계 보고서 출력</a> </li>
       </ul>
     </div>
@@ -95,43 +95,45 @@
 
 
 <div class="wrap_sec">
-  <center><h1><strong>고객사 별 연간 작업 횟수 통계({{ current_year }}년)</strong></h1></center>
-      <div id="container1">
+  <center><h1><strong>월간 내역 조회 ({{ current_year }}년 {{ current_month }}월)</strong></h1></center>
+  <br>
+      <center><strong><h5>
+      <p>고객사 별 월별 작업 횟수 통계 페이지입니다..</p>
+      <p>고객명 및 연도/월를 선택하면 해당 데이터가 나타납니다..<br>
+
+   <div id="container1">
       <div id="input-form">
           <br>
-          <strong>[검색기능] 고객명 : </strong><input type="text" id="keyword" />
+          <strong>[검색기능] 고객사명 : </strong><input type="text" id="keyword" />
       </div>
 
-  <form action="/test" method="post" id="yearCheck" style="text-align:right">
-      <select name="year" id="yearBox" title="년도"></select>
-      <button type="submit" class="btn btn-primary">연도 이동</button>
+  <form method="post" id="yearMonthCheck" style="text-align:right">
+      <input type="month" name="month" id="input_month">
+      <button type="submit" class="btn btn-primary" onclick="javascript: form.action='/mon_stat';">이동</button>
   </form>
+  
+  <div class="container2" style="width:100; height:330px; overflow:auto">
+  <table id="table_detail" class="table table--min" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed; border: 5px solid rgba(1, 245, 184, 0.603); height: 100px; margin: auto; font-weight: bold;" >
+      <thead>
+      <tr>
+          <th scope="col">고객사명</th>
+          <th scope="col">고객분류</th>
+          <th scope="col">월 별 건수</th>
+      </tr>
+      </thead>
+      <tbody class="table-group-divider">
+      {% for element in data %}
+      <tr onclick="vacation_per_employee('employee_info_{{ loop.index }}');" class="employee_row">
+          <td>{{element['cliname']}}</td>
+          <td>{{element['clitype']}}</td>
+          <td>{{element['mon_date']}}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
 
-  <div class="container" style="width:100; height:700px; overflow:auto">
-    <table id="table_detail" class="table table--min" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed; border: 5px solid black; height: 100px; margin: auto; font-weight: bold;" >
-        <thead>
-        <tr>
-            <th scope="col">고객명</th>
-            <th scope="col">고객분류</th>
-            <th scope="col">연 건수</th>
-        </tr>
-        </thead>
-        <tbody class="table-group-divider">
-        {% for element in data %}
-        <tr onclick="vacation_per_employee('employee_info_{{ loop.index }}');" class="employee_row">
-            <td>{{element['cliname']}}</td>
-            <td>{{element['clitype']}}</td>
-            <td>{{element['year_date']}}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-
-    </table>
-    </div>
- 
-  </form>
-</div>
-</div>
+  </table>
+      </div>
+  </div>
 </div>
     
 
@@ -151,8 +153,9 @@
     </div>
   </div>
 
-  <script>
-    $(document).ready(function() {
+
+<script>
+  $(document).ready(function() {
             $("#keyword").keyup(function() {
                 var k = $(this).val();
                 $("#table_detail > tbody > tr").hide();
@@ -161,42 +164,16 @@
                 $(temp).parent().show();
             })
         })
-
-
-function vacation_per_employee(row) {
-    $("." + row).submit();
-}
+    $(".logo_index").click(function () {
+    window.location = '/hanseongbinjjangjjangman'
+})
 
 $(document).ready(function(){
-    var date = new Date();
-    var selYear = {{ current_year }};
-
-    // 현재 연도를 기준으로 호출
-    getYears(selYear);
-
-    // 연도를 select
-    $('#yearBox').val(selYear);
-
-    // 바뀐 연도로 다시 option 세팅
-    $('#yearBox').change(function(){
-        var chgYear = $(this).val();
-        getYears(chgYear);
-        $('#yearBox').val(chgYear);
-    });
-  });
-
-function getYears(getY){
-    // 올해 기준으로 -2 ~ +2 년을 보여줌.
-    let stY = Number(getY) - 2;
-    let enY = Number(getY) + 2;
-    for (let y = stY; y <= enY; y++) {
-        $('#yearBox').append("<option value='" + y + "'>" + y + " 년" +"</option>");
-    }
-}
+    // 선택한 연월 값 넣기
+    $('#input_month').val("{{ current_year }}-{{ current_month }}");
+});
 
 </script>
 
-
 </body>
 </html>
-
