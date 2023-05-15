@@ -145,7 +145,7 @@ def mj_test():
         result_update = update_stat_all_date(row['cliname'], row['clitype'])
     
     result = select_worklist()
-    return render_template('test/mj_test2.html',data=result, client_type=year)
+    return render_template('test/mj_test.html',data=result, client_type=year)
 
 ## 찬우테스트
 @app.route('/cw_test')
